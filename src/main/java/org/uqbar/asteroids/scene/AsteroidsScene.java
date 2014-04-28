@@ -17,6 +17,7 @@ public class AsteroidsScene extends GameScene {
 	
 	public void addAsteroid(Asteroid asteroid) {
 		this.asteroids.add(asteroid);
+		this.addComponent(asteroid);
 	}
 	
 	@Override
