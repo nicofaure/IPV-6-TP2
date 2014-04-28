@@ -14,4 +14,15 @@ public class AsteroidsScene extends GameScene {
 	public List<Asteroid> getAsteroids() {
 		return this.asteroids;
 	}
+	
+	public void addAsteroid(Asteroid asteroid) {
+		this.asteroids.add(asteroid);
+	}
+	
+	@Override
+	public void initializeComponents() {
+		for (int i = 0; i < 10; i++) {
+			this.addAsteroid(new Asteroid());
+		}
+	}
 }
