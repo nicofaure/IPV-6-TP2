@@ -4,7 +4,7 @@ import java.awt.Dimension;
 
 import com.uqbar.vainilla.Game;
 
-public class Asteroid extends Game {
+public class Asteroids extends Game {
 
 	@Override
 	public Dimension getDisplaySize() {
