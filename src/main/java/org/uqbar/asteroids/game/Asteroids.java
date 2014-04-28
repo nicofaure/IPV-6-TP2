@@ -2,32 +2,35 @@ package org.uqbar.asteroids.game;
 
 import java.awt.Dimension;
 
+import org.uqbar.arkanoid.scene.ArkanoidLevelOneScene;
+
+import com.uqbar.vainilla.DesktopGameLauncher;
 import com.uqbar.vainilla.Game;
 
 public class Asteroids extends Game {
 
+	public static void main(String[] args) throws Exception {
+		new DesktopGameLauncher(new Asteroids()).launch();
+	}
+	
+	@Override
+	protected void setUpScenes() {
+		GameScene scene = new AsteroidsScene();		
+		this.setCurrentScene(scene);
+	}
+
 	@Override
 	public Dimension getDisplaySize() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Dimension(400, 600);
 	}
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Arkanoid";
 	}
 
 	@Override
 	protected void initializeResources() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void setUpScenes() {
-		// TODO Auto-generated method stub
-
 	}
 
 }
