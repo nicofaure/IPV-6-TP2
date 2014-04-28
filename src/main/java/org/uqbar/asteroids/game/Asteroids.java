@@ -2,7 +2,7 @@ package org.uqbar.asteroids.game;
 
 import java.awt.Dimension;
 
-import org.uqbar.arkanoid.scene.ArkanoidLevelOneScene;
+import org.uqbar.asteroids.scene.AsteroidsScene;
 
 import com.uqbar.vainilla.DesktopGameLauncher;
 import com.uqbar.vainilla.Game;
@@ -15,7 +15,7 @@ public class Asteroids extends Game {
 	
 	@Override
 	protected void setUpScenes() {
-		GameScene scene = new AsteroidsScene();		
+		AsteroidsScene scene = new AsteroidsScene();		
 		this.setCurrentScene(scene);
 	}
 
