@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.uqbar.asteroids.components.Asteroid;
+import org.uqbar.asteroids.components.Bullet;
 
 import com.uqbar.vainilla.GameScene;
 
@@ -17,14 +18,21 @@ public class AsteroidsScene extends GameScene {
 	
 	public void addAsteroid(Asteroid asteroid) {
 		this.asteroids.add(asteroid);
-		asteroid.setRndPosition(this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight());
 		this.addComponent(asteroid);
 	}
 	
 	@Override
 	public void initializeComponents() {
-		for (int i = 0; i < 50; i++) {
-			this.addAsteroid(new Asteroid());
+		this.addComponent(new Bullet());
+		for (int i = 0; i < 4; i++) {
+			Asteroid asteroid = new Asteroid();
+			this.addAsteroid(asteroid);
+			asteroid.setRndPosition(this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight());
 		}
+	}
+
+	public void removeAsteroid(Asteroid asteroid) {
+		this.asteroids.remove(asteroid);
+		asteroid.destroy();
 	}
 }

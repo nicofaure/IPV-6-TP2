@@ -3,17 +3,22 @@ package org.uqbar.asteroids.components;
 import java.awt.Color;
 import java.util.Random;
 
+import org.uqbar.asteroids.scene.AsteroidsScene;
+
 import com.uqbar.vainilla.DeltaState;
-import com.uqbar.vainilla.GameScene;
 import com.uqbar.vainilla.MovableComponent;
-import com.uqbar.vainilla.appearances.Circle;
 import com.uqbar.vainilla.appearances.Rectangle;
-import com.uqbar.vainilla.sound.SoundBuilder;
 import com.uqbar.vainilla.utils.Vector2D;
 
-public class Asteroid extends MovableComponent<GameScene>{
+public class Asteroid extends MovableComponent<AsteroidsScene>{
 
-	
+	public Asteroid(double x, double y){
+		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
+		this.setVector(this.buildVector());
+		this.setSpeed(this.obtainRnd(20, 120));
+		this.setX(x);
+		this.setY(y);
+	}
 	
 	public Asteroid(){
 		super();
@@ -26,8 +31,7 @@ public class Asteroid extends MovableComponent<GameScene>{
 		return new Vector2D(this.obtainRnd(-100, 100), this.obtainRnd(-100, 100)).asVersor();
 	}
 	
-	public void setRndPosition(int widht, int height)
-	{
+	public void setRndPosition(int widht, int height){
 		this.setX(this.obtainRnd(0, widht));
 		this.setY(this.obtainRnd(0, height));
 	}
@@ -78,7 +82,6 @@ public class Asteroid extends MovableComponent<GameScene>{
 		return this.getY() + this.getAppearance().getHeight();
 	}
 
-	
 	private int obtainRnd(int min, int max){
 		Random r = new Random();
 		return r.nextInt(max-min) + min;
