@@ -17,12 +17,13 @@ public class AsteroidsScene extends GameScene {
 	
 	public void addAsteroid(Asteroid asteroid) {
 		this.asteroids.add(asteroid);
+		asteroid.setRndPosition(this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight());
 		this.addComponent(asteroid);
 	}
 	
 	@Override
 	public void initializeComponents() {
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 50; i++) {
 			this.addAsteroid(new Asteroid());
 		}
 	}
