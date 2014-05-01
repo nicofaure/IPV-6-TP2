@@ -23,8 +23,11 @@ public class AsteroidsScene extends GameScene {
 	
 	@Override
 	public void initializeComponents() {
+		for (int i = 0; i < 2000; i++) {
 		this.addComponent(new Bullet());
-		for (int i = 0; i < 4; i++) {
+		}
+		
+		for (int i = 0; i < 1; i++) {
 			Asteroid asteroid = new Asteroid();
 			this.addAsteroid(asteroid);
 			asteroid.setRndPosition(this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight());

@@ -16,7 +16,8 @@ public class Bullet extends MovableComponent<AsteroidsScene> {
 	private int radius = 10;
 
 	public Bullet() {
-		this.setAppearance(new Circle(Color.GREEN, 2 * this.radius));
+		Random r = new Random();
+		this.setAppearance(new Circle(new Color(r.nextInt(256),r.nextInt(256),r.nextInt(256)), 2 * this.radius));
 		this.setVector(this.buildVector());
 		this.setSpeed(this.obtainRnd(20, 120));
 		this.setX(0);

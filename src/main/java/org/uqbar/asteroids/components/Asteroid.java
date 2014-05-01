@@ -13,7 +13,8 @@ import com.uqbar.vainilla.utils.Vector2D;
 public class Asteroid extends MovableComponent<AsteroidsScene>{
 
 	public Asteroid(double x, double y){
-		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
+		Random r = new Random();
+		this.setAppearance(new Rectangle(new Color(r.nextInt(256),r.nextInt(256),r.nextInt(256)), 10, 150));
 		this.setVector(this.buildVector());
 		this.setSpeed(this.obtainRnd(20, 120));
 		this.setX(x);
@@ -22,7 +23,7 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	
 	public Asteroid(){
 		super();
-		this.setAppearance(new Rectangle(Color.RED, 20, 20));
+		this.setAppearance(new Rectangle(Color.RED, 10, 150));
 		this.setVector(this.buildVector());
 		this.setSpeed(this.obtainRnd(20, 120));
 	}
