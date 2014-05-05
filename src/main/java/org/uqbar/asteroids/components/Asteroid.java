@@ -14,19 +14,13 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	private int life;
 	
 
-	public Asteroid(double x, double y){
+	public Asteroid(double x, double y, int life){
 		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
 		this.setVector(this.buildVector());
 		this.setSpeed(this.obtainRnd(20, 120));
 		this.setX(x);
 		this.setY(y);
-	}
-	
-	public Asteroid(){
-		super();
-		this.setAppearance(new Rectangle(Color.RED, 20, 20));
-		this.setVector(this.buildVector());
-		this.setSpeed(this.obtainRnd(20, 120));
+		this.life = life;
 	}
 	
 	private Vector2D buildVector() {
@@ -102,8 +96,8 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	
 	private void divide() {
 		this.destroy();
-		this.getScene().addAsteroid(new Asteroid(this.getX(), this.getY()));
-		this.getScene().addAsteroid(new Asteroid(this.getX(), this.getY()));
+		this.getScene().addAsteroid(new Asteroid(this.getX(), this.getY(), this.getLife()));
+		this.getScene().addAsteroid(new Asteroid(this.getX(), this.getY(), this.getLife()));
 	}
 
 	public int getLife() {

@@ -35,11 +35,10 @@ public class AsteroidsScene extends GameScene {
 		this.initializeBackground();
 		this.addComponent(this.getShip());
 		for (int i = 0; i < 10; i++) {
-			Asteroid asteroid = new Asteroid();
+			Asteroid asteroid = new Asteroid(0,0,3);
 			this.addAsteroid(asteroid);
 			asteroid.setRndPosition(this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight());
 		}
-		
 	}
 
 	public void removeAsteroid(Asteroid asteroid) {

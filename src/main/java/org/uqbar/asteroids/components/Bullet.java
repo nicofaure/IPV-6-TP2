@@ -12,12 +12,12 @@ import com.uqbar.vainilla.utils.Vector2D;
 
 public class Bullet extends MovableComponent<AsteroidsScene> {
 
-	private int radius = 10;
+	private int radius = 2;
 
-	public Bullet(Vector2D vector, double x, double y) {
+	public Bullet(double vx, double vy, double x, double y) {
 		this.setAppearance(new Circle(Color.GREEN, 2 * this.radius));
-		this.setVector(vector);
-		this.setSpeed(120);
+		this.setVector(new Vector2D(vx, vy));
+		this.setSpeed(350);
 		this.setX(x);
 		this.setY(y);
 	}
@@ -29,7 +29,6 @@ public class Bullet extends MovableComponent<AsteroidsScene> {
 
 	@Override
 	public void update(DeltaState deltaState) {
-		// this.checkRebound();
 		if (this.isOutOfSpace()) {
 			this.destroy();
 		} else {
@@ -43,9 +42,7 @@ public class Bullet extends MovableComponent<AsteroidsScene> {
 					break;
 				}
 			}
-
 		}
-		super.update(deltaState);
 	}
 
 	private boolean impactAsteroid(Asteroid asteroid) {
