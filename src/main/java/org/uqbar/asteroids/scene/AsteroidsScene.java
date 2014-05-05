@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.uqbar.asteroids.components.Asteroid;
-import org.uqbar.asteroids.components.Bullet;
 import org.uqbar.asteroids.components.Ship;
 
 import com.uqbar.vainilla.GameComponent;
@@ -35,8 +34,7 @@ public class AsteroidsScene extends GameScene {
 	public void initializeComponents() {
 		this.initializeBackground();
 		this.addComponent(this.getShip());
-		this.addComponent(new Bullet());
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 10; i++) {
 			Asteroid asteroid = new Asteroid();
 			this.addAsteroid(asteroid);
 			asteroid.setRndPosition(this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight());
@@ -50,11 +48,16 @@ public class AsteroidsScene extends GameScene {
 	}
 
 	public Ship getShip() {
-		return ship;
+		return this.ship;
 	}
 
 	public void setShip(Ship ship) {
 		this.ship = ship;
 		this.addComponent(ship);
+	}
+
+	public void addPoint() {
+		// TODO Auto-generated method stub
+		
 	}
 }

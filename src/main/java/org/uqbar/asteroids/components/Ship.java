@@ -42,15 +42,22 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 			Sprite sprite = Sprite.fromImage("images/ship.png");
 			this.getVector().rotate(-1 * radialSpeed/100);
 			this.setAppearance(sprite.rotate(this.getVector().angle()));
+		}else if(deltaState.isKeyBeingHold(Key.SPACE)){
+			this.shoot();
 		}
 		
 		//this.move(advance * this.getVector().getX(), advance * this.getVector().getY());
 
 	}
 
+	private void shoot() {
+		Bullet bullet = new Bullet(this.getVector(), this.getX(), this.getY());
+		this.getScene().addComponent(bullet);
+	}
+
 
 	private double getRadialSpeed() {
-		return radialSpeed;
+		return this.radialSpeed;
 	}
 
 

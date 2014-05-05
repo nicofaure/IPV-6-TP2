@@ -11,6 +11,8 @@ import com.uqbar.vainilla.appearances.Rectangle;
 import com.uqbar.vainilla.utils.Vector2D;
 
 public class Asteroid extends MovableComponent<AsteroidsScene>{
+	private int life;
+	
 
 	public Asteroid(double x, double y){
 		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
@@ -85,6 +87,31 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	private int obtainRnd(int min, int max){
 		Random r = new Random();
 		return r.nextInt(max-min) + min;
+	}
+
+	public void hit() {
+		this.getScene().addPoint();                   
+		if (this.getLife() > 1) {
+			this.life--;
+			this.divide();
+		}else {
+			this.destroy();
+		}
+		this.getScene().removeAsteroid(this);		
+	}
+	
+	private void divide() {
+		this.destroy();
+		this.getScene().addAsteroid(new Asteroid(this.getX(), this.getY()));
+		this.getScene().addAsteroid(new Asteroid(this.getX(), this.getY()));
+	}
+
+	public int getLife() {
+		return this.life;
+	}
+	
+	public void setLife(int life) {
+		this.life = life;
 	}
 
 
