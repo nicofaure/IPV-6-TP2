@@ -22,11 +22,6 @@ public class Bullet extends MovableComponent<AsteroidsScene> {
 		this.setY(y);
 	}
 
-//	private int obtainRnd(int min, int max) {
-//		Random r = new Random();
-//		return r.nextInt(max - min) + min;
-//	}
-
 	@Override
 	public void update(DeltaState deltaState) {
 		if (this.isOutOfSpace()) {
