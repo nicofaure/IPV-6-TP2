@@ -14,9 +14,9 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 
 	public Asteroid(double x, double y){
 		Random r = new Random();
-		this.setAppearance(new Rectangle(new Color(r.nextInt(256),r.nextInt(256),r.nextInt(256)), 10, 150));
+		this.setAppearance(new Rectangle(new Color(r.nextInt(256),r.nextInt(256),r.nextInt(256)), this.obtainRnd(10, 50), this.obtainRnd(10, 50)));
 		this.setVector(this.buildVector());
-		this.setSpeed(this.obtainRnd(20, 120));
+		this.setSpeed(this.obtainRnd(120, 320));
 		this.setX(x);
 		this.setY(y);
 	}
