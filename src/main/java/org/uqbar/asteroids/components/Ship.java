@@ -10,7 +10,7 @@ import com.uqbar.vainilla.utils.Vector2D;
 
 public class Ship extends MovableComponent<AsteroidsScene>{
 
-	private double radialSpeed = 150;
+	private double radialSpeed = 450;
 	
 	
 	public Ship(){
@@ -36,9 +36,7 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 		
 		if(deltaState.isKeyBeingHold(Key.RIGHT)){
 			Sprite sprite = Sprite.fromImage("images/ship.png");
-			System.out.println("Antes:" + this.getVector().angle());
 			this.getVector().rotate(radialSpeed/100);
-			System.out.println("Despues:" + this.getVector().angle());
 			this.setAppearance(sprite.rotate(this.getVector().angle()));
 		}else if(deltaState.isKeyBeingHold(Key.LEFT)){
 			Sprite sprite = Sprite.fromImage("images/ship.png");
