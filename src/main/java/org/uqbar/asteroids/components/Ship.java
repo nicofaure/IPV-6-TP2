@@ -11,39 +11,40 @@ import com.uqbar.vainilla.utils.Vector2D;
 
 public class Ship extends MovableComponent<AsteroidsScene>{
 
-	private double radialSpeed = 450;
-	private Vector2D rotationVector; 
+	// Configuraciones
+	// TODO: Levantarlas de un archivo de propiedades
+	private static int SHOOTING_DELAY = 100;
+	private static int RADIAL_STEP = 5; 
+	
+	private Vector2D rotationVector;
+	private int shootingDelay = 0; 
 	
 	public Ship(){
-		super(Sprite.fromImage("images/ship.png").rotate(Math.PI/2),10,10);
-		//super(new Rectangle(Color.WHITE, 10 ,10), 10 ,10);
+		super(getDefaultAppearance(),10,10);
 		this.setVector(new Vector2D(1,0));
 		this.setRotationVector(new Vector2D(1, 0));
 		this.setX(200);
 		this.setY(300);
 		this.setSpeed(25);
 	}
+	
+	private static Sprite getDefaultAppearance() {
+		return Sprite.fromImage("images/ship.png").rotate(Math.PI/2);
+	}
 
 	@Override
 	public void update(DeltaState deltaState){
-		double energy = this.getSpeed() * deltaState.getDelta() * this.getAcceleration()/2 * Math.pow(deltaState.getDelta(), 2);
-		System.out.println(energy);
-		this.setSpeed(this.getSpeed() + this.getAcceleration() * deltaState.getDelta());
 		
-		//double advance = this.getSpeed() * deltaState.getDelta();
+		this.decreaseShootDelay(deltaState);
 		
-		double radialSpeed = this.getRadialSpeed() * deltaState.getDelta();
-		
+		// Chequeo del control del giro de la nave.
 		if(deltaState.isKeyBeingHold(Key.RIGHT)){
-			Sprite sprite = Sprite.fromImage("images/ship.png").rotate(Math.PI/2);
-			this.getRotationVector().rotate(radialSpeed/100);
-			this.setAppearance(sprite.rotate(this.getRotationVector().angle()));
+			rotateRight(deltaState.getDelta());
 		} else if(deltaState.isKeyBeingHold(Key.LEFT)){
-			Sprite sprite = Sprite.fromImage("images/ship.png").rotate(Math.PI/2);
-			this.getRotationVector().rotate(-1 * radialSpeed/100);
-			this.setAppearance(sprite.rotate(this.getRotationVector().angle()));
+			rotateLeft(deltaState.getDelta());
 		} 
 		
+		// Chequeo del control del "propulsor" de la nave.
 		if(deltaState.isKeyBeingHold(Key.UP)) {
 			this.increaseAcceleration();
 			this.setVector(this.getRotationVector().asVersor().copy());
@@ -51,29 +52,76 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 			this.decreaseAcceleration();
 		} else {
 			this.decreaseAcceleration();
-		}
+		}		
 		
-		if(deltaState.isKeyPressed(Key.SPACE)){
+		if (deltaState.isKeyPressed(Key.SPACE)) {
 			this.shoot();
 		}
 		
-		this.move(this.getVector().getX() * energy, this.getVector().getY() * energy);
+		this.move(deltaState);
 		
-		//this.move(advance * this.getVector().getX(), advance * this.getVector().getY());
+		// Chequea y se teletransporta si es necesario.
+		// TODO: No esta bueno, deberia estar en otra parte!
 		this.doTeleport();
+	}
+
+	// ---
+	// Movement methods
+	// ---
+	private void move(DeltaState deltaState) {
+		double energy = this.getSpeed() * deltaState.getDelta() * this.getAcceleration()/2 * Math.pow(deltaState.getDelta(), 2);
+		this.setSpeed(this.getSpeed() + this.getAcceleration() * deltaState.getDelta());
+		this.move(this.getVector().getX() * energy, this.getVector().getY() * energy);
 	}
 	
 	private void doTeleport() {
-		if(this.atBottomBorder()){
-			this.setY(1-this.getAppearance().getHeight());
-		}else if (this.atTopBorder()){
-			this.setY(this.getGame().getDisplayHeight()-1);
+		if (this.atBottomBorder()) {
+			this.alignBottomTo(1);
+		}else if (this.atTopBorder()) {
+			this.alignTopTo(this.getGame().getDisplayHeight()-1);
 		}else if (this.atLeftBorder()){
-			this.setX(this.getGame().getDisplayWidth()-1);
+			this.alignLeftTo(this.getGame().getDisplayWidth() - 1);
 		}else if (this.atRightBorder()){
-			this.setX(1-this.getAppearance().getWidth());
+			this.setX(1 - this.getAppearance().getWidth());
 		}
 	}
+	
+	// ---
+	// Rotation methods
+	// ---
+	
+	private void rotate(double rotation) {
+		this.getRotationVector().rotate(rotation);
+		Sprite sprite = getDefaultAppearance();
+		this.setAppearance(sprite.rotate(this.getRotationVector().angle()));
+	}
+	
+	private void rotateLeft(double delta) {
+		double rotation = RADIAL_STEP * delta * -1;
+		this.rotate(rotation);
+	}
+
+	private void rotateRight(double delta) {
+		double rotation = RADIAL_STEP * delta;
+		this.rotate(rotation);
+	}
+
+	// ---
+	// Shooting methods
+	// ---
+	private void shoot() {
+		if (this.getShootDelay() <= 0) {
+			Bullet bullet = new Bullet(this.getRotationVector().getX(),this.getRotationVector().getY(), this.getX(), this.getY());
+			this.getScene().addComponent(bullet);
+			this.setShootDelay(SHOOTING_DELAY);
+		}
+	}
+	
+	private void decreaseShootDelay(DeltaState deltaState) {
+		if( this.getShootDelay() > 0) {
+			this.shootingDelay -= deltaState.getDelta();
+		}
+	}	
 	
 	private boolean atBottomBorder() {
 		return  this.getGame().getDisplayHeight() <= this.getY();
@@ -108,27 +156,20 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 		}
 	}
 
-	private void shoot() {
-		Bullet bullet = new Bullet(this.getRotationVector().getX(),this.getRotationVector().getY(), this.getX(), this.getY());
-		this.getScene().addComponent(bullet);
-	}
-
-
-	private double getRadialSpeed() {
-		return this.radialSpeed;
-	}
-
-
-	private void setRadialSpeed(double radialSpeed) {
-		this.radialSpeed = radialSpeed;
-	}
-
 	public Vector2D getRotationVector() {
 		return rotationVector;
 	}
 
 	public void setRotationVector(Vector2D rotationVector) {
 		this.rotationVector = rotationVector;
+	}
+
+	public int getShootDelay() {
+		return shootingDelay;
+	}
+
+	public void setShootDelay(int shootDelay) {
+		this.shootingDelay = shootDelay;
 	}
 	
 }
