@@ -12,14 +12,19 @@ import com.uqbar.vainilla.utils.Vector2D;
 
 public class Bullet extends MovableComponent<AsteroidsScene> {
 
+	private static final int BULLET_SPEED = 350;
 	private int radius = 2;
 
-	public Bullet(double vx, double vy, double x, double y) {
-		this.setAppearance(new Circle(Color.GREEN, 2 * this.radius));
+	public Bullet(double vx, double vy, double x, double y, double shipSpeed) {
+		this.setAppearance(getDefaultAppearance());
 		this.setVector(new Vector2D(vx, vy));
-		this.setSpeed(350);
+		this.setSpeed(BULLET_SPEED + shipSpeed );
 		this.setX(x);
 		this.setY(y);
+	}
+
+	private Circle getDefaultAppearance() {
+		return new Circle(Color.GREEN, 2 * this.radius);
 	}
 
 	@Override

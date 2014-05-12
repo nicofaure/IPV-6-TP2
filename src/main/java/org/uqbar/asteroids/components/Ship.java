@@ -14,7 +14,11 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 	// Configuraciones
 	// TODO: Levantarlas de un archivo de propiedades
 	private static int SHOOTING_DELAY = 100;
-	private static int RADIAL_STEP = 5; 
+	private static int ROTATION_STEP = 5; 
+	
+	private static double MAX_SPEED = 5;
+	private static double MAX_ACCELERATION = 10;
+	private static double MIN_ACCELERATION = -5;
 	
 	private Vector2D rotationVector;
 	private int shootingDelay = 0; 
@@ -23,9 +27,15 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 		super(getDefaultAppearance(),10,10);
 		this.setVector(new Vector2D(1,0));
 		this.setRotationVector(new Vector2D(1, 0));
-		this.setX(200);
-		this.setY(300);
-		this.setSpeed(25);
+		this.setSpeed(0);
+		this.setAccelerationStep(0.02);
+	}
+	
+	@Override
+	public void onSceneActivated() {
+		this.alignHorizontalCenterTo(this.getGame().getDisplayWidth() / 2);
+		this.alignVerticalCenterTo(this.getGame().getDisplayHeight() / 2);
+		super.onSceneActivated();
 	}
 	
 	private static Sprite getDefaultAppearance() {
@@ -46,10 +56,10 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 		
 		// Chequeo del control del "propulsor" de la nave.
 		if(deltaState.isKeyBeingHold(Key.UP)) {
-			this.increaseAcceleration();
-			this.setVector(this.getRotationVector().asVersor().copy());
+			this.setAcceleration(1);
 		} else if(deltaState.isKeyBeingHold(Key.DOWN)) {
 			this.decreaseAcceleration();
+			this.setAcceleration(MAX_ACCELERATION);
 		} else {
 			this.decreaseAcceleration();
 		}		
@@ -69,10 +79,15 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 	// Movement methods
 	// ---
 	private void move(DeltaState deltaState) {
-		double energy = this.getSpeed() * deltaState.getDelta() * this.getAcceleration()/2 * Math.pow(deltaState.getDelta(), 2);
-		this.setSpeed(this.getSpeed() + this.getAcceleration() * deltaState.getDelta());
-		this.move(this.getVector().getX() * energy, this.getVector().getY() * energy);
-	}
+		System.out.println("Speed: " + this.getSpeed());
+		System.out.println("Acce: " + this.getAcceleration());
+		this.setSpeed( this.getSpeed() + this.getAcceleration() * deltaState.getDelta() );
+		if(this.getSpeed() > 0) {
+			this.move(this.getRotationVector().asVersor().getX() * this.getSpeed(), this.getRotationVector().asVersor().getY() * this.getSpeed());
+		} else {
+			this.setSpeed(0);
+		}
+	} 
 	
 	private void doTeleport() {
 		if (this.atBottomBorder()) {
@@ -83,6 +98,22 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 			this.alignLeftTo(this.getGame().getDisplayWidth() - 1);
 		}else if (this.atRightBorder()){
 			this.setX(1 - this.getAppearance().getWidth());
+		}
+	}
+	
+	@Override
+	public void increaseAcceleration() {
+		if (this.getAcceleration() < MAX_ACCELERATION) {
+			super.increaseAcceleration();
+		}
+	}
+	
+	@Override
+	public void setSpeed(double speed) {
+		if (speed <= MAX_SPEED) {
+			super.setSpeed(speed);
+		} else {
+			super.setSpeed(MAX_SPEED);
 		}
 	}
 	
@@ -97,12 +128,12 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 	}
 	
 	private void rotateLeft(double delta) {
-		double rotation = RADIAL_STEP * delta * -1;
+		double rotation = ROTATION_STEP * delta * -1;
 		this.rotate(rotation);
 	}
 
 	private void rotateRight(double delta) {
-		double rotation = RADIAL_STEP * delta;
+		double rotation = ROTATION_STEP * delta;
 		this.rotate(rotation);
 	}
 
@@ -110,15 +141,15 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 	// Shooting methods
 	// ---
 	private void shoot() {
-		if (this.getShootDelay() <= 0) {
-			Bullet bullet = new Bullet(this.getRotationVector().getX(),this.getRotationVector().getY(), this.getX(), this.getY());
+		if (this.getShootingDelay() <= 0) {
+			Bullet bullet = new Bullet(this.getRotationVector().getX(),this.getRotationVector().getY(), this.getX(), this.getY(), this.getSpeed());
 			this.getScene().addComponent(bullet);
-			this.setShootDelay(SHOOTING_DELAY);
+			this.setShootingDelay(SHOOTING_DELAY);
 		}
 	}
 	
 	private void decreaseShootDelay(DeltaState deltaState) {
-		if( this.getShootDelay() > 0) {
+		if( this.getShootingDelay() > 0) {
 			this.shootingDelay -= deltaState.getDelta();
 		}
 	}	
@@ -151,7 +182,7 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 	
 	@Override
 	public void decreaseAcceleration() {
-		if(this.getAcceleration() > 0) { 
+		if(this.getAcceleration() > MIN_ACCELERATION) { 
 			super.decreaseAcceleration();
 		}
 	}
@@ -164,11 +195,11 @@ public class Ship extends MovableComponent<AsteroidsScene>{
 		this.rotationVector = rotationVector;
 	}
 
-	public int getShootDelay() {
+	public int getShootingDelay() {
 		return shootingDelay;
 	}
 
-	public void setShootDelay(int shootDelay) {
+	public void setShootingDelay(int shootDelay) {
 		this.shootingDelay = shootDelay;
 	}
 	
