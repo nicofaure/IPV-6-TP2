@@ -21,7 +21,7 @@ public class Asteroids extends Game {
 
 	@Override
 	public Dimension getDisplaySize() {
-		return new Dimension(400, 600);
+		return new Dimension(1000, 700);
 	}
 
 	@Override
