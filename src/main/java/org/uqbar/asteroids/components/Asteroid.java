@@ -14,22 +14,37 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	private int life;
 	
 
+	public Asteroid(int life){
+		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
+		this.setVector(this.buildVector());
+		this.setSpeed(this.obtainRnd(50, 150));
+		this.life = life;
+	}
+	
 	public Asteroid(double x, double y, int life){
 		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
 		this.setVector(this.buildVector());
 		this.setSpeed(this.obtainRnd(50, 150));
-		this.positioningOutsideTheSpace(x,y);
+		this.setX(x);
+		this.setY(y);
 		this.life = life;
 	}
 	
-	private void positioningOutsideTheSpace(double x, double y) {
-		int randomX = this.obtainRnd(0, (int) x);
-		if(randomX > x/2){
+	@Override
+	public void onSceneActivated() {
+		this.positioningOutsideTheSpace();
+		super.onSceneActivated();
+	}
+	
+	private void positioningOutsideTheSpace() {
+		int width = this.getScene().getWidth();
+		int randomX = this.obtainRnd(0, width);
+		if(randomX > width/2){
 			this.setX(randomX);
 			this.setY(0);
 		}else {
 			this.setX(0);
-			this.setY(this.obtainRnd(0, (int) y));
+			this.setY(this.obtainRnd(0, this.getScene().getHeight()));
 		}
 		
 	}
