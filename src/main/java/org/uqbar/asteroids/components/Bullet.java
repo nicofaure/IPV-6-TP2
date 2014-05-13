@@ -12,11 +12,11 @@ import com.uqbar.vainilla.utils.Vector2D;
 
 public class Bullet extends MovableComponent<AsteroidsScene> {
 
-	private static final int BULLET_SPEED = 350;
+	private static final int BULLET_SPEED = 500;
 	private int radius = 2;
 
 	public Bullet(double vx, double vy, double x, double y, double shipSpeed) {
-		this.setAppearance(getDefaultAppearance());
+		this.setAppearance(this.getDefaultAppearance());
 		this.setVector(new Vector2D(vx, vy));
 		this.setSpeed(BULLET_SPEED + shipSpeed );
 		this.setX(x);
