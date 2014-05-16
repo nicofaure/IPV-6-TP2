@@ -12,7 +12,7 @@ import com.uqbar.vainilla.utils.Vector2D;
 
 public class Bullet extends MovableComponent<AsteroidsScene> {
 
-	private int radius = 2;
+	private int radius = 1;
 
 	public Bullet(double vx, double vy, double x, double y) {
 		this.setAppearance(new Circle(Color.GREEN, 2 * this.radius));
