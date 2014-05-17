@@ -35,9 +35,8 @@ public class AsteroidsScene extends GameScene {
 		this.initializeBackground();
 		this.addComponent(this.getShip());
 		for (int i = 0; i < 10; i++) {
-			Asteroid asteroid = new Asteroid(0,0,3);
+			Asteroid asteroid = new Asteroid(3);
 			this.addAsteroid(asteroid);
-			asteroid.setRndPosition(this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight());
 		}
 	}
 
@@ -57,6 +56,13 @@ public class AsteroidsScene extends GameScene {
 
 	public void addPoint() {
 		// TODO Auto-generated method stub
-		
+	}
+
+	public int getWidth() {
+		return this.getGame().getDisplayWidth();
+	}
+
+	public int getHeight() {
+		return this.getGame().getDisplayHeight();
 	}
 }

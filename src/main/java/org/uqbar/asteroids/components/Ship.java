@@ -1,11 +1,6 @@
 package org.uqbar.asteroids.components;
 
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-
 import org.uqbar.asteroids.scene.AsteroidsScene;
 
 import com.uqbar.vainilla.DeltaState;
@@ -14,156 +9,207 @@ import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.events.constants.Key;
 import com.uqbar.vainilla.utils.Vector2D;
 
-public class Ship extends MovableComponent<AsteroidsScene>{
+public class Ship extends MovableComponent<AsteroidsScene> {
 
-	private double radialSpeed = 450;
-	private Vector2D rotationVector; 
 	
-	public Ship(){
-		super(Sprite.fromImage("images/rocket2.png").scale(0.5),20,20);
-		//super(new Rectangle(Color.WHITE, 10 ,10), 10 ,10);
-		this.setVector(new Vector2D(1,0));
-		this.setRotationVector(new Vector2D(0, -1));
-		this.setX(200);
-		this.setY(300);
-		this.setSpeed(25);
+	// Configuraciones
+	// TODO: Levantarlas de un archivo de propiedades
+	private static int SHOOTING_DELAY = 50;
+	private static int ROTATION_STEP = 5;
+	private Vector2D accelerationVector;
+	private int shootingDelay = 0;
+
+	public Ship() {
+		super(getDefaultAppearance(), 10, 10);
+		this.setVector(new Vector2D(1, 0));
+		this.setAccelerationVector(new Vector2D(1, 0));
 	}
 
 	@Override
-	public void render(Graphics2D graphics){
-//		Color c = graphics.getColor();
-//		graphics.setColor(Color.green);
-//		Stroke stroke = graphics.getStroke();
-//		Stroke stroke2 = new BasicStroke(10); 
-//	    graphics.setStroke(stroke2);
-//
-//		graphics.setColor(c);
-//		graphics.setStroke(stroke);	
-		super.render(graphics);
+	public void onSceneActivated() {
+		this.alignHorizontalCenterTo(this.getGame().getDisplayWidth() / 2);
+		this.alignVerticalCenterTo(this.getGame().getDisplayHeight() / 2);
+		super.onSceneActivated();
 	}
-	
-	@Override
-	public void update(DeltaState deltaState){
-		double energy = this.getSpeed() * deltaState.getDelta() * this.getAcceleration()/2 * Math.pow(deltaState.getDelta(), 2);
-		this.setSpeed(this.getSpeed() + this.getAcceleration() * deltaState.getDelta());
-		
-		//double advance = this.getSpeed() * deltaState.getDelta();
-		
-		double radialSpeed = this.getRadialSpeed() * deltaState.getDelta();
 
-		if(deltaState.isKeyBeingHold(Key.RIGHT)){
-			Sprite sprite = Sprite.fromImage("images/rocket2.png");
-			
-			this.getRotationVector().rotate(radialSpeed/100);
-			Sprite rotatedSprite = sprite.rotate(this.getRotationVector().angle() + Math.PI/2 );
-			
-			this.setAppearance(rotatedSprite.scale(0.5));
-		} else if(deltaState.isKeyBeingHold(Key.LEFT)){
-			Sprite sprite = Sprite.fromImage("images/rocket2.png");
-			this.getRotationVector().rotate(-1 * radialSpeed/100);
-			this.setAppearance(sprite.rotate(this.getRotationVector().angle() + Math.PI/2 ).scale(0.5));
-		} 
+	private static Sprite getDefaultAppearance() {
+		return Sprite.fromImage("images/rocket2.png").scale(0.4).rotate(Math.PI / 2);
+	}
+
+	@Override
+	public void update(DeltaState deltaState) {
+
+		this.decreaseShootDelay(deltaState);
 		
-		if(deltaState.isKeyBeingHold(Key.UP)) {
-			this.increaseAcceleration();
-			this.setVector(this.getRotationVector().asVersor().copy());
-		} else if(deltaState.isKeyBeingHold(Key.DOWN)) {
-			this.decreaseAcceleration();
+		// Chequeo del control del giro de la nave.
+		if (deltaState.isKeyBeingHold(Key.RIGHT)) {
+			this.rotateRight(deltaState.getDelta());
+		} else if (deltaState.isKeyBeingHold(Key.LEFT)) {
+			this.rotateLeft(deltaState.getDelta());
+		}
+
+		// Chequeo del control del "propulsor" de la nave.
+		if (deltaState.isKeyBeingHold(Key.UP)) {
+			this.actAcceleration(deltaState);
+			//actualizar velocidad
+			this.actSpeed(deltaState);
 		} else {
 			this.decreaseAcceleration();
 		}
-		
-		if(deltaState.isKeyPressed(Key.SPACE)){
+
+		if (deltaState.isKeyPressed(Key.SPACE)) {
 			this.shoot();
 		}
-		
-		this.move(this.getVector().getX() * energy, this.getVector().getY() * energy);
-		
-		//this.move(advance * this.getVector().getX(), advance * this.getVector().getY());
+
+		this.move(deltaState);
+
+		// Chequea y se teletransporta si es necesario.
+		// TODO: No esta bueno, deberia estar en otra parte!
 		this.doTeleport();
 	}
-	
-	private void doTeleport() {
-		if(this.atBottomBorder()){
-			this.setY(1-this.getAppearance().getHeight());
-		}else if (this.atTopBorder()){
-			this.setY(this.getGame().getDisplayHeight()-1);
-		}else if (this.atLeftBorder()){
-			this.setX(this.getGame().getDisplayWidth()-1);
-		}else if (this.atRightBorder()){
-			this.setX(1-this.getAppearance().getWidth());
-		}
+
+	@Override
+	public void decreaseAcceleration() {
+		this.setVector(this.getVector().producto(0.999));
 	}
 	
+	private void actAcceleration(DeltaState deltaState) {
+		// TODO Auto-generated method stub
+		double deltaAcceleration = 0.5;
+		double deltaX = 0;
+		double deltaY = 0;
+		
+		if(this.getAccelerationVector().getX()>0) {
+			deltaX = deltaAcceleration; 
+		}
+		else {
+			deltaX = -deltaAcceleration;
+		}
+		
+		if(this.getAccelerationVector().getY()>0) {
+			deltaY = deltaAcceleration; 
+		}
+		else {
+			deltaY = -deltaAcceleration;
+		}
+		this.setAccelerationVector(this.getAccelerationVector().suma(new Vector2D(deltaX, deltaY)));
+	}
+
+	// ---
+	// Movement methods
+	// ---
+	private void actSpeed(DeltaState deltaState) {
+		Vector2D deltaVelocidad = this.getAccelerationVector().producto(deltaState.getDelta());
+		this.setVector(this.getVector().suma(deltaVelocidad));
+	}
+
+	private void move(DeltaState deltaState) {
+		Vector2D positionUpdate = this.getPosition().suma(this.getVector().producto(deltaState.getDelta()));
+		this.setX(positionUpdate.getX());
+		this.setY(positionUpdate.getY());
+	}
+
+	private Vector2D getPosition() {
+		return new Vector2D(this.getX(), this.getY());
+	}
+
+	private void doTeleport() {
+		if (this.atBottomBorder()) {
+			this.alignBottomTo(1);
+		} else if (this.atTopBorder()) {
+			this.alignTopTo(this.getGame().getDisplayHeight() - 1);
+		} else if (this.atLeftBorder()) {
+			this.alignLeftTo(this.getGame().getDisplayWidth() - 1);
+		} else if (this.atRightBorder()) {
+			this.setX(1 - this.getAppearance().getWidth());
+		}
+	}
+
+	// ---
+	// Rotation methods
+	// ---
+
+	private void rotate(double rotation) {
+		this.getAccelerationVector().rotate(rotation);
+		Sprite sprite = getDefaultAppearance();
+		this.setAppearance(sprite.rotate(this.getAccelerationVector().angle()));
+	}
+
+	private void rotateLeft(double delta) {
+		double rotation = ROTATION_STEP * delta * -1;
+		this.rotate(rotation);
+	}
+
+	private void rotateRight(double delta) {
+		double rotation = ROTATION_STEP * delta;
+		this.rotate(rotation);
+	}
+
+	// ---
+	// Shooting methods
+	// ---
+	private void shoot() {
+
+		if (this.getShootingDelay() <= 0) {
+			
+			Vector2D vector = this.getAccelerationVector().producto(16*0.4*0.5);;
+
+			
+			Bullet bullet = new Bullet(this.getAccelerationVector().getX(), 
+										this.getAccelerationVector().getY(), 
+										this.getX() + vector.getX() * -1, 
+										this.getY() + vector.getY() * -1,
+					this.getSpeed());
+			this.getScene().addComponent(bullet);
+			this.setShootingDelay(SHOOTING_DELAY);
+		}
+	}
+
+	private void decreaseShootDelay(DeltaState deltaState) {
+		if (this.getShootingDelay() > 0) {
+			this.shootingDelay -= deltaState.getDelta();
+		}
+	}
+
 	private boolean atBottomBorder() {
-		return  this.getGame().getDisplayHeight() <= this.getY();
+		return this.getGame().getDisplayHeight() <= this.getY();
 	}
 
 	private boolean atTopBorder() {
 		return this.obtainAbsoluteY() <= 0;
 	}
-		
+
 	private boolean atRightBorder() {
 		return this.getGame().getDisplayWidth() <= this.getX();
 	}
-	
+
 	private boolean atLeftBorder() {
 		return this.obtainAbsoluteX() <= 0;
 	}
-	
-	
+
 	public double obtainAbsoluteX() {
 		return this.getX() + this.getAppearance().getWidth();
 	}
-	
-	
+
 	public double obtainAbsoluteY() {
 		return this.getY() + this.getAppearance().getHeight();
 	}
-	
-	@Override
-	public void decreaseAcceleration() {
-		if(this.getAcceleration() > 0) { 
-			super.decreaseAcceleration();
-		}
+
+
+	public int getShootingDelay() {
+		return this.shootingDelay;
 	}
 
-	private void shoot() {
-
-		System.out.println("X:" + this.getRotationVector().getX());
-		System.out.println("Y:" + this.getRotationVector().getY());
-		
-		double delta = 0;
-		if(this.getRotationVector().getY()>0)
-		{
-			delta = 0;
-		}else{
-			delta = -2;
-		}
-		
-		Bullet bullet = new Bullet(this.getRotationVector().getX(),
-									this.getRotationVector().getY(), 
-									this.getX()+(this.getAppearance().getWidth()/2) -2, 
-									this.getY() + (this.getAppearance().getHeight()/2)-2d);
-		this.getScene().addComponent(bullet);
+	public void setShootingDelay(int shootDelay) {
+		this.shootingDelay = shootDelay;
 	}
 
-
-	private double getRadialSpeed() {
-		return this.radialSpeed;
+	public Vector2D getAccelerationVector() {
+		return this.accelerationVector;
 	}
 
-
-	private void setRadialSpeed(double radialSpeed) {
-		this.radialSpeed = radialSpeed;
+	public void setAccelerationVector(Vector2D accelerationVector) {
+		this.accelerationVector = accelerationVector;
 	}
 
-	public Vector2D getRotationVector() {
-		return rotationVector;
-	}
-
-	public void setRotationVector(Vector2D rotationVector) {
-		this.rotationVector = rotationVector;
-	}
-	
 }

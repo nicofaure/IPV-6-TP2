@@ -14,25 +14,45 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	private int life;
 	
 
+	public Asteroid(int life){
+		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
+		this.setVector(this.buildVector());
+		this.setSpeed(this.obtainRnd(50, 150));
+		this.life = life;
+	}
+	
 	public Asteroid(double x, double y, int life){
 		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
 		this.setVector(this.buildVector());
-		this.setSpeed(this.obtainRnd(20, 120));
+		this.setSpeed(this.obtainRnd(50, 150));
 		this.setX(x);
 		this.setY(y);
 		this.life = life;
 	}
 	
+	@Override
+	public void onSceneActivated() {
+		this.positioningOutsideTheSpace();
+		super.onSceneActivated();
+	}
+	
+	private void positioningOutsideTheSpace() {
+		int width = this.getScene().getWidth();
+		int randomX = this.obtainRnd(0, width);
+		if(randomX > width/2){
+			this.setX(randomX);
+			this.setY(0);
+		}else {
+			this.setX(0);
+			this.setY(this.obtainRnd(0, this.getScene().getHeight()));
+		}
+		
+	}
+
 	private Vector2D buildVector() {
 		return new Vector2D(this.obtainRnd(-100, 100), this.obtainRnd(-100, 100)).asVersor();
 	}
 	
-	public void setRndPosition(int widht, int height){
-		this.setX(this.obtainRnd(0, widht));
-		this.setY(this.obtainRnd(0, height));
-	}
-	
-
 	private void doTeleport() {
 		if(this.atBottomBorder()){
 			this.setY(1-this.getAppearance().getHeight());
