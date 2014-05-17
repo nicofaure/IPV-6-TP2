@@ -152,13 +152,13 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 
 		if (this.getShootingDelay() <= 0) {
 			
-			Vector2D vector = this.getAccelerationVector().producto(16*0.4*0.5);;
-
+			Vector2D vector = this.getAccelerationVector().copy();
+			vector.producto(16*0.4*0.5);
 			
 			Bullet bullet = new Bullet(this.getAccelerationVector().getX(), 
 										this.getAccelerationVector().getY(), 
-										this.getX() + vector.getX() * -1, 
-										this.getY() + vector.getY() * -1,
+										this.getX() + this.getAppearance().getWidth()/2 -2 , 
+										this.getY() + this.getAppearance().getHeight()/2 -2,
 					this.getSpeed());
 			this.getScene().addComponent(bullet);
 			this.setShootingDelay(SHOOTING_DELAY);
