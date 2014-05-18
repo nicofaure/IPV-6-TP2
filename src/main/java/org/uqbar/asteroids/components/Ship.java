@@ -1,7 +1,9 @@
 package org.uqbar.asteroids.components;
 
 
+import org.uqbar.asteroids.game.Asteroids;
 import org.uqbar.asteroids.scene.AsteroidsScene;
+import org.uqbar.asteroids.utils.BulletPoolSingleton;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
@@ -151,15 +153,11 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 	private void shoot() {
 
 		if (this.getShootingDelay() <= 0) {
-			
-			Vector2D vector = this.getAccelerationVector().copy();
-			vector.producto(16*0.4*0.5);
-			
-			Bullet bullet = new Bullet(this.getAccelerationVector().getX(), 
-										this.getAccelerationVector().getY(), 
-										this.getX() + this.getAppearance().getWidth()/2 -2 , 
-										this.getY() + this.getAppearance().getHeight()/2 -2,
-					this.getSpeed());
+			Bullet bullet = BulletPoolSingleton.getInstance().obtainBullet();
+			bullet.setVector(new Vector2D(this.getAccelerationVector().getX(), this.getAccelerationVector().getY()));
+			bullet.setX(this.getX() + this.getAppearance().getWidth()/2 -2);
+			bullet.setY(this.getY() + this.getAppearance().getHeight()/2 -2);
+			bullet.setSpeed(this.getSpeed());
 			this.getScene().addComponent(bullet);
 			this.setShootingDelay(SHOOTING_DELAY);
 		}
@@ -167,7 +165,7 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 
 	private void decreaseShootDelay(DeltaState deltaState) {
 		if (this.getShootingDelay() > 0) {
-			this.shootingDelay -= deltaState.getDelta();
+			this.shootingDelay -= deltaState.getDelta() * 250;
 		}
 	}
 

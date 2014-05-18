@@ -3,15 +3,23 @@ package org.uqbar.asteroids.game;
 import java.awt.Dimension;
 
 import org.uqbar.asteroids.scene.AsteroidsScene;
+import org.uqbar.asteroids.utils.BulletPoolSingleton;
 
 import com.uqbar.vainilla.DesktopGameLauncher;
 import com.uqbar.vainilla.Game;
 
 public class Asteroids extends Game {
 
+	
 	public static void main(String[] args) throws Exception {
 		new DesktopGameLauncher(new Asteroids()).launch();
 	}
+	
+	public Asteroids(){
+		super();
+		this.initializeBulletPool();
+	}
+	
 	
 	@Override
 	protected void setUpScenes() {
@@ -31,6 +39,14 @@ public class Asteroids extends Game {
 
 	@Override
 	protected void initializeResources() {
+		
 	}
+	
+	private void initializeBulletPool() {
+		for(int i=0; i<25; i++){
+			BulletPoolSingleton.getInstance().obtainBullet();
+		}
+	}
+
 
 }

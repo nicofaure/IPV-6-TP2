@@ -2,22 +2,28 @@ package org.uqbar.asteroids.components;
 
 import java.awt.Color;
 
+import org.uqbar.asteroids.game.Asteroids;
 import org.uqbar.asteroids.scene.AsteroidsScene;
+import org.uqbar.asteroids.utils.BulletPoolSingleton;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
 import com.uqbar.vainilla.appearances.Circle;
 import com.uqbar.vainilla.colissions.CollisionDetector;
-import com.uqbar.vainilla.utils.Vector2D;
 
 public class Bullet extends MovableComponent<AsteroidsScene> {
 
 	private static final int BULLET_SPEED = 500;
 	private int radius = 2;
 
-	public Bullet(double vx, double vy, double x, double y, double shipSpeed) {
+	public Bullet(){
+		super();
 		this.setAppearance(this.getDefaultAppearance());
-		this.setVector(new Vector2D(vx, vy));
+		this.setSpeed(BULLET_SPEED);
+	}
+	
+	public Bullet(double vx, double vy, double x, double y, double shipSpeed) {
+
 		this.setSpeed(BULLET_SPEED + shipSpeed );
 		this.setX(x);
 		this.setY(y);
@@ -29,16 +35,19 @@ public class Bullet extends MovableComponent<AsteroidsScene> {
 
 	@Override
 	public void update(DeltaState deltaState) {
+
 		if (this.isOutOfSpace()) {
-			this.destroy();
+			
+			BulletPoolSingleton.getInstance().returnBullet(this);
+			
 		} else {
-			double advance = this.getSpeed() * deltaState.getDelta();
+			double advance = (this.getSpeed() + BULLET_SPEED) * deltaState.getDelta();
 			this.move(advance * this.getVector().getX(), advance
 					* this.getVector().getY());
 			for (Asteroid asteroid : this.getScene().getAsteroids()) {
 				if (this.impactAsteroid(asteroid)) {
 					asteroid.hit();
-					this.destroy();
+					BulletPoolSingleton.getInstance().returnBullet(this);
 					break;
 				}
 			}
@@ -51,6 +60,10 @@ public class Bullet extends MovableComponent<AsteroidsScene> {
 				asteroid.getX(), asteroid.getY(), asteroid
 						.getAppearance().getWidth(), asteroid
 						.getAppearance().getHeight());
+	}
+	
+	public void reset(){
+		this.setDestroyPending(false);
 	}
 
 	private boolean isOutOfSpace() {
