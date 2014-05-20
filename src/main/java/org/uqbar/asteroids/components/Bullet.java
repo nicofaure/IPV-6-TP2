@@ -35,23 +35,30 @@ public class Bullet extends MovableComponent<Level1> {
 
 	@Override
 	public void update(DeltaState deltaState) {
-
-		if (this.isOutOfSpace()) {
-			
-			BulletPoolSingleton.getInstance().returnBullet(this);
-			
-		} else {
-			double advance = (this.getSpeed() + BULLET_SPEED) * deltaState.getDelta();
-			this.move(advance * this.getVector().getX(), advance
-					* this.getVector().getY());
-			for (Asteroid asteroid : this.getScene().getAsteroids()) {
-				if (this.impactAsteroid(asteroid)) {
-					asteroid.hit();
-					BulletPoolSingleton.getInstance().returnBullet(this);
-					break;
+		
+		if(this.getGame()!=null)
+		{
+			if(this.getScene().getAsteroids().size()>0)
+			{
+				if (this.isOutOfSpace()) {
+					BulletPoolSingleton.getInstance().returnBullet(this);			
+				} else {
+					double advance = (this.getSpeed() + BULLET_SPEED) * deltaState.getDelta();
+					this.move(advance * this.getVector().getX(), advance
+							* this.getVector().getY());
+					for (Asteroid asteroid : this.getScene().getAsteroids()) {
+						if (this.impactAsteroid(asteroid)) {
+							asteroid.hit();
+							BulletPoolSingleton.getInstance().returnBullet(this);
+							break;
+						}
+					}
 				}
+			}else{
+				this.getScene().win();
 			}
 		}
+
 	}
 
 	private boolean impactAsteroid(Asteroid asteroid) {

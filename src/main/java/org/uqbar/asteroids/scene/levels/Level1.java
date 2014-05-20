@@ -7,6 +7,7 @@ import java.util.List;
 import org.uqbar.asteroids.components.Asteroid;
 import org.uqbar.asteroids.components.Ship;
 import org.uqbar.asteroids.scene.GameOverScene;
+import org.uqbar.asteroids.scene.WinScene;
 import org.uqbar.asteroids.utils.ResourceUtil;
 
 import com.uqbar.vainilla.GameComponent;
@@ -37,6 +38,7 @@ public class Level1 extends GameScene {
 	public void initializeComponents() {
 		this.initializeBackground();
 		this.addComponent(this.getShip());
+		
 		for (int i = 0; i < ResourceUtil.getResourceInt("Asteroids.level1.asteroidCount"); i++) {
 			Asteroid asteroid = new Asteroid(3);
 			this.addAsteroid(asteroid);
@@ -60,9 +62,22 @@ public class Level1 extends GameScene {
 	public void addPoint() {
 		// TODO Auto-generated method stub
 	}
-
+	
+	public void win(){
+		this.getShip().destroy();
+		for(int i=0; i<this.getAsteroids().size();i++){
+			Asteroid asteroid = this.getAsteroids().get(i);
+			asteroid.destroy();
+		}
+		this.getGame().setCurrentScene(new WinScene(new PointsCounter()));
+	}
+	
 	public void loseLife() {
 			this.getShip().destroy();
+			for(int i=0; i<this.getAsteroids().size();i++){
+				Asteroid asteroid = this.getAsteroids().get(i);
+				asteroid.destroy();
+			}
 			this.getGame().setCurrentScene(new GameOverScene(new PointsCounter()));
 	}
 	

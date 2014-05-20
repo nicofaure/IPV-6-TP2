@@ -77,9 +77,12 @@ public class Asteroid extends MovableComponent<Level1>{
 
 	@Override
 	public void update(DeltaState deltaState){
-		double advance = this.getSpeed() * deltaState.getDelta();
-		this.move(advance * this.getVector().getX(), advance * this.getVector().getY());
-		this.doTeleport();
+		if(this.getGame()!=null)
+		{
+			double advance = this.getSpeed() * deltaState.getDelta();
+			this.move(advance * this.getVector().getX(), advance * this.getVector().getY());
+			this.doTeleport();
+		}
 	}
 
 	private boolean atBottomBorder() {
