@@ -1,13 +1,14 @@
 package org.uqbar.asteroids.components;
 
 
-import org.uqbar.asteroids.game.Asteroids;
 import org.uqbar.asteroids.scene.AsteroidsScene;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
+import org.uqbar.asteroids.utils.ResourceUtil;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
 import com.uqbar.vainilla.appearances.Sprite;
+import com.uqbar.vainilla.colissions.CollisionDetector;
 import com.uqbar.vainilla.events.constants.Key;
 import com.uqbar.vainilla.utils.Vector2D;
 
@@ -16,10 +17,12 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 	
 	// Configuraciones
 	// TODO: Levantarlas de un archivo de propiedades
-	private static int SHOOTING_DELAY = 50;
-	private static int ROTATION_STEP = 5;
+	private static int SHOOTING_DELAY = ResourceUtil.getResourceInt("Ship.SHOOTING_DELAY");
+	private static int ROTATION_STEP = ResourceUtil.getResourceInt("Ship.ROTATION_STEP");
+	private static String ROCKET_SPRITE = ResourceUtil.getResourceString("Ship.ROCKET_SPRITE");
+	
 	private Vector2D accelerationVector;
-	private int shootingDelay = 0;
+	private int shootingDelay = ResourceUtil.getResourceInt("Ship.shootingDelay");
 
 	public Ship() {
 		super(getDefaultAppearance(), 10, 10);
@@ -35,7 +38,7 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 	}
 
 	private static Sprite getDefaultAppearance() {
-		return Sprite.fromImage("images/rocket2.png").scale(0.4).rotate(Math.PI / 2);
+		return Sprite.fromImage(ROCKET_SPRITE).scale(0.4).rotate(Math.PI / 2);
 	}
 
 	@Override
@@ -64,10 +67,38 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 		}
 
 		this.move(deltaState);
-
+		this.checkAsteroidCollision();
 		// Chequea y se teletransporta si es necesario.
 		// TODO: No esta bueno, deberia estar en otra parte!
 		this.doTeleport();
+	}
+
+	private void checkAsteroidCollision() {
+		for (Asteroid asteroid : this.getScene().getAsteroids()) {
+			if (this.impactAsteroid(asteroid)) {
+				this.loseLife();
+				break;
+			}
+		}
+	}
+
+	private void loseLife() {
+		this.getScene().loseLife();
+		this.destroy();
+	}
+
+	private boolean impactAsteroid(Asteroid asteroid) {
+		return CollisionDetector
+				.INSTANCE
+				.collidesRectAgainstRect(
+						this.getX(), 
+						this.getY(), 
+						this.getAppearance().getWidth(), 
+						this.getAppearance().getHeight(), 
+						asteroid.getX(), 
+						asteroid.getY(), 
+						asteroid.getAppearance().getWidth(), 
+						asteroid.getAppearance().getHeight());	
 	}
 
 	@Override

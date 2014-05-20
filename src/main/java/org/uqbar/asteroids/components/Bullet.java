@@ -1,36 +1,36 @@
 package org.uqbar.asteroids.components;
 
-import java.awt.Color;
 
+import java.awt.Color;
 import org.uqbar.asteroids.scene.AsteroidsScene;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
 import org.uqbar.asteroids.utils.ResourceUtil;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
-import com.uqbar.vainilla.appearances.Circle;
+import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.colissions.CollisionDetector;
 
 public class Bullet extends MovableComponent<AsteroidsScene> {
 
-	private static final int BULLET_SPEED = Integer.parseInt(ResourceUtil.getResource("Bullet.BULLET_SPEED"));
-	private int radius = Integer.parseInt(ResourceUtil.getResource("Bullet.radius"));
+	private static final int BULLET_SPEED = ResourceUtil.getResourceInt("Bullet.BULLET_SPEED");
+	private int radius = ResourceUtil.getResourceInt("Bullet.radius");
 
 	public Bullet(){
 		super();
-		this.setAppearance(this.getDefaultAppearance());
+		this.setAppearance(getDefaultAppearance());
 		this.setSpeed(BULLET_SPEED);
 	}
 	
 	public Bullet(double vx, double vy, double x, double y, double shipSpeed) {
-
+//		super(getDefaultAppearance(),x,y);
 		this.setSpeed(BULLET_SPEED + shipSpeed );
 		this.setX(x);
 		this.setY(y);
 	}
 
-	private Circle getDefaultAppearance() {
-		return new Circle(Color.GREEN, 2 * this.radius);
+	private static Sprite getDefaultAppearance() {
+		return Sprite.fromImage("images/shoot.png");
 	}
 
 	@Override

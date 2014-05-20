@@ -7,8 +7,12 @@ public class ResourceUtil {
 
 	private static ResourceBundle properties = ResourceBundle.getBundle("config",new Locale("es"));
 
-	public static String getResource(String name){
+	public static String getResourceString(String name){
 		return properties.getString(name);
+	}
+	
+	public static int getResourceInt(String name){
+		return Integer.parseInt(properties.getString(name));
 	}
 	
 	

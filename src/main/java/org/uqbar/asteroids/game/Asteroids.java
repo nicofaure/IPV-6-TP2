@@ -35,7 +35,7 @@ public class Asteroids extends Game {
 
 	@Override
 	public String getTitle() {
-		return ResourceUtil.getResource("Asteroids.getTitle");
+		return ResourceUtil.getResourceString("Asteroids.getTitle");
 	}
 
 	@Override
