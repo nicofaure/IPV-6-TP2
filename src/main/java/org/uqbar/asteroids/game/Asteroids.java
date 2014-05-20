@@ -10,7 +10,9 @@ import com.uqbar.vainilla.DesktopGameLauncher;
 import com.uqbar.vainilla.Game;
 
 public class Asteroids extends Game {
-
+	
+	private static int SIZE_WIDTH = ResourceUtil.getResourceInt("Asteroids.SIZE_WIDTH");
+	private static int SIZE_HEIGHT = ResourceUtil.getResourceInt("Asteroids.SIZE_HEIGHT");
 	
 	public static void main(String[] args) throws Exception {
 		new DesktopGameLauncher(new Asteroids()).launch();
@@ -30,7 +32,7 @@ public class Asteroids extends Game {
 
 	@Override
 	public Dimension getDisplaySize() {
-		return new Dimension(1000, 700);
+		return new Dimension(SIZE_WIDTH, SIZE_HEIGHT);
 	}
 
 	@Override
