@@ -5,7 +5,7 @@ import com.uqbar.vainilla.appearances.Sprite;
 public class AsteroidsSpriteManager {
 	
 	public static Sprite getSprite(int scale) {
-		return getImage().crop(0, 0, ResourceUtil.getResourceInt("Asteroid.sprite.height"), ResourceUtil.getResourceInt("Asteroid.SPRITE_WIDTH")).scale(scale);
+		return getImage().crop(0, 0, ResourceUtil.getResourceInt("Asteroid.sprite.height"), ResourceUtil.getResourceInt("Asteroid.sprite.width")).scale(scale);
 	}
 
 	public static Sprite getSprite() {
@@ -13,7 +13,7 @@ public class AsteroidsSpriteManager {
 	}
 	
 	private static Sprite getImage() {
-		return Sprite.fromImage(ResourceUtil.getResourceString("Asteroid.SPRITE_FILE"));
+		return Sprite.fromImage(ResourceUtil.getResourceString("Asteroid.sprite.file"));
 	}
 	
 	
