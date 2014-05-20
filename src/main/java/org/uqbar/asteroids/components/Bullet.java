@@ -14,6 +14,7 @@ import com.uqbar.vainilla.colissions.CollisionDetector;
 public class Bullet extends MovableComponent<AsteroidsScene> {
 
 	private static final int BULLET_SPEED = ResourceUtil.getResourceInt("Bullet.BULLET_SPEED");
+	private static final String BULLET_SPRITE = ResourceUtil.getResourceString("Bullet.BULLET_SPRITE");
 	private int radius = ResourceUtil.getResourceInt("Bullet.radius");
 
 	public Bullet(){
@@ -30,7 +31,7 @@ public class Bullet extends MovableComponent<AsteroidsScene> {
 	}
 
 	private static Sprite getDefaultAppearance() {
-		return Sprite.fromImage("images/shoot.png");
+		return Sprite.fromImage(BULLET_SPRITE);
 	}
 
 	@Override
