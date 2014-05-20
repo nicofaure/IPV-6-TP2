@@ -10,6 +10,7 @@ import org.uqbar.asteroids.components.Ship;
 import com.uqbar.vainilla.GameComponent;
 import com.uqbar.vainilla.GameScene;
 import com.uqbar.vainilla.appearances.Rectangle;
+import com.uqbar.vainilla.components.PointsCounter;
 
 public class AsteroidsScene extends GameScene {
 
@@ -59,7 +60,8 @@ public class AsteroidsScene extends GameScene {
 	}
 
 	public void loseLife() {
-		// TODO Auto-generated method stub
+			this.getShip().destroy();
+			this.getGame().setCurrentScene(new GameOverScene(new PointsCounter()));
 	}
 	
 	public int getWidth() {

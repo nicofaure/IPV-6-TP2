@@ -2,6 +2,7 @@ package org.uqbar.asteroids.components;
 
 
 import org.uqbar.asteroids.scene.AsteroidsScene;
+import org.uqbar.asteroids.scene.GameOverScene;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
 import org.uqbar.asteroids.utils.ResourceUtil;
 
@@ -9,6 +10,7 @@ import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
 import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.colissions.CollisionDetector;
+import com.uqbar.vainilla.components.PointsCounter;
 import com.uqbar.vainilla.events.constants.Key;
 import com.uqbar.vainilla.sound.Sound;
 import com.uqbar.vainilla.sound.SoundBuilder;
@@ -83,17 +85,13 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 		for (Asteroid asteroid : this.getScene().getAsteroids()) {
 			if (this.impactAsteroid(asteroid)) {
 				this.playCollisionSound();
-				//this.loseLife();
-				System.out.println("Colision");
+				this.getScene().loseLife();
 				break;
 			}
 		}
 	}
 
-	private void loseLife() {
-		this.getScene().loseLife();
-		this.destroy();
-	}
+
 
 	private boolean impactAsteroid(Asteroid asteroid) {
 		return CollisionDetector
@@ -115,7 +113,6 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 	}
 	
 	private void actAcceleration(DeltaState deltaState) {
-		// TODO Auto-generated method stub
 		double deltaAcceleration = 0.5;
 		double deltaX = 0;
 		double deltaY = 0;
@@ -219,7 +216,10 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 	}
 
 	private boolean atBottomBorder() {
-		return this.getGame().getDisplayHeight() <= this.getY();
+		if(this.getGame()!=null){
+			return this.getGame().getDisplayHeight() <= this.getY();
+		}
+		return false;
 	}
 
 	private boolean atTopBorder() {
@@ -227,7 +227,10 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 	}
 
 	private boolean atRightBorder() {
-		return this.getGame().getDisplayWidth() <= this.getX();
+		if(this.getGame()!=null){
+			return this.getGame().getDisplayWidth() <= this.getX();
+		}
+		return false;
 	}
 
 	private boolean atLeftBorder() {

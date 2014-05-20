@@ -73,7 +73,10 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	}
 
 	private boolean atBottomBorder() {
-		return  this.getGame().getDisplayHeight() <= this.getY();
+		if(this.getGame()!=null){
+			return  this.getGame().getDisplayHeight() <= this.getY();
+		}
+		return false;
 	}
 
 	private boolean atTopBorder() {
@@ -81,7 +84,10 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	}
 		
 	private boolean atRightBorder() {
-		return this.getGame().getDisplayWidth() <= this.getX();
+		if(this.getGame()!=null){
+			return this.getGame().getDisplayWidth() <= this.getX();
+		}
+		return false;
 	}
 	
 	private boolean atLeftBorder() {
