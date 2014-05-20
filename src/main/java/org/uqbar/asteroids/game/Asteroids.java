@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import org.uqbar.asteroids.scene.AsteroidsScene;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
+import org.uqbar.asteroids.utils.ResourceUtil;
 
 import com.uqbar.vainilla.DesktopGameLauncher;
 import com.uqbar.vainilla.Game;
@@ -34,7 +35,7 @@ public class Asteroids extends Game {
 
 	@Override
 	public String getTitle() {
-		return "Arkanoid";
+		return ResourceUtil.getResource("Asteroids.getTitle");
 	}
 
 	@Override

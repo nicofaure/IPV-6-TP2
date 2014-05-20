@@ -2,9 +2,9 @@ package org.uqbar.asteroids.components;
 
 import java.awt.Color;
 
-import org.uqbar.asteroids.game.Asteroids;
 import org.uqbar.asteroids.scene.AsteroidsScene;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
+import org.uqbar.asteroids.utils.ResourceUtil;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
@@ -13,8 +13,8 @@ import com.uqbar.vainilla.colissions.CollisionDetector;
 
 public class Bullet extends MovableComponent<AsteroidsScene> {
 
-	private static final int BULLET_SPEED = 500;
-	private int radius = 2;
+	private static final int BULLET_SPEED = Integer.parseInt(ResourceUtil.getResource("Bullet.BULLET_SPEED"));
+	private int radius = Integer.parseInt(ResourceUtil.getResource("Bullet.radius"));
 
 	public Bullet(){
 		super();
