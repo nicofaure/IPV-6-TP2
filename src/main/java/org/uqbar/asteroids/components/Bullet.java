@@ -2,7 +2,8 @@ package org.uqbar.asteroids.components;
 
 
 import java.awt.Color;
-import org.uqbar.asteroids.scene.AsteroidsScene;
+
+import org.uqbar.asteroids.scene.levels.Level1;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
 import org.uqbar.asteroids.utils.ResourceUtil;
 
@@ -11,7 +12,7 @@ import com.uqbar.vainilla.MovableComponent;
 import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.colissions.CollisionDetector;
 
-public class Bullet extends MovableComponent<AsteroidsScene> {
+public class Bullet extends MovableComponent<Level1> {
 
 	private static final int BULLET_SPEED = ResourceUtil.getResourceInt("Bullet.BULLET_SPEED");
 	private static final String BULLET_SPRITE = ResourceUtil.getResourceString("Bullet.BULLET_SPRITE");

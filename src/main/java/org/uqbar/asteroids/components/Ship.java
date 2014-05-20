@@ -9,7 +9,7 @@ import org.uqbar.asteroids.components.ship.rules.RotateLeftShipRule;
 import org.uqbar.asteroids.components.ship.rules.RotateRightShipRule;
 import org.uqbar.asteroids.components.ship.rules.ShipRule;
 import org.uqbar.asteroids.components.ship.rules.ShootingShipRule;
-import org.uqbar.asteroids.scene.AsteroidsScene;
+import org.uqbar.asteroids.scene.levels.Level1;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
 import org.uqbar.asteroids.utils.ResourceUtil;
 
@@ -20,7 +20,7 @@ import com.uqbar.vainilla.colissions.CollisionDetector;
 import com.uqbar.vainilla.events.constants.Key;
 import com.uqbar.vainilla.utils.Vector2D;
 
-public class Ship extends MovableComponent<AsteroidsScene> {
+public class Ship extends MovableComponent<Level1> {
 
 	
 	// Configuraciones

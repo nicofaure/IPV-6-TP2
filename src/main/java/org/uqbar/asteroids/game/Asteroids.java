@@ -2,7 +2,7 @@ package org.uqbar.asteroids.game;
 
 import java.awt.Dimension;
 
-import org.uqbar.asteroids.scene.AsteroidsScene;
+import org.uqbar.asteroids.scene.levels.Level1;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
 import org.uqbar.asteroids.utils.ResourceUtil;
 
@@ -26,7 +26,7 @@ public class Asteroids extends Game {
 	
 	@Override
 	protected void setUpScenes() {
-		AsteroidsScene scene = new AsteroidsScene();		
+		Level1 scene = new Level1();		
 		this.setCurrentScene(scene);
 	}
 
