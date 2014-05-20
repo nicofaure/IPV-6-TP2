@@ -3,7 +3,7 @@ package org.uqbar.asteroids.components;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.uqbar.asteroids.scene.AsteroidsScene;
+import org.uqbar.asteroids.scene.levels.Level1;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.GameComponent;
@@ -29,7 +29,7 @@ public class ScreenMessage extends GameComponent<GameScene> {
 		
 		if(deltaState.isKeyPressed(Key.ENTER))
 		{
-			this.getGame().setCurrentScene(new AsteroidsScene());
+			this.getGame().setCurrentScene(new Level1());
 		}
 		
 		super.update(deltaState);

@@ -1,34 +1,41 @@
 package org.uqbar.asteroids.components;
 
-import java.awt.Color;
 import java.util.Random;
 
-import org.uqbar.asteroids.scene.AsteroidsScene;
+import org.uqbar.asteroids.scene.levels.Level1;
+import org.uqbar.asteroids.utils.AsteroidsSpriteManager;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
-import com.uqbar.vainilla.appearances.Rectangle;
+import com.uqbar.vainilla.appearances.Appearance;
 import com.uqbar.vainilla.utils.Vector2D;
 
-public class Asteroid extends MovableComponent<AsteroidsScene>{
+public class Asteroid extends MovableComponent<Level1>{
 	private int life;
 	
 
 	public Asteroid(int life){
-		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
+		this.life = life;
+		this.setAppearance(getDefaultAppearance());
 		this.setVector(this.buildVector());
 		this.setSpeed(this.obtainRnd(50, 150));
-		this.life = life;
 	}
 	
 	public Asteroid(double x, double y, int life){
-		this.setAppearance(new Rectangle(Color.BLUE, 20, 20));
+		this.life = life;
+		this.setAppearance(getDefaultAppearance());
 		this.setVector(this.buildVector());
 		this.setSpeed(this.obtainRnd(50, 150));
 		this.setX(x);
 		this.setY(y);
-		this.life = life;
+		
 	}
+
+	private Appearance getDefaultAppearance() {
+		//return new Rectangle(Color.BLUE, 20, 20);
+		return AsteroidsSpriteManager.getSprite(this.life);
+	}
+	
 	
 	@Override
 	public void onSceneActivated() {
@@ -54,14 +61,17 @@ public class Asteroid extends MovableComponent<AsteroidsScene>{
 	}
 	
 	private void doTeleport() {
-		if(this.atBottomBorder()){
-			this.setY(1-this.getAppearance().getHeight());
-		}else if (this.atTopBorder()){
-			this.setY(this.getGame().getDisplayHeight()-1);
-		}else if (this.atLeftBorder()){
-			this.setX(this.getGame().getDisplayWidth()-1);
-		}else if (this.atRightBorder()){
-			this.setX(1-this.getAppearance().getWidth());
+		if(this.getGame()!=null)
+		{
+			if(this.atBottomBorder()){
+				this.setY(1-this.getAppearance().getHeight());
+			}else if (this.atTopBorder()){
+				this.setY(this.getGame().getDisplayHeight()-1);
+			}else if (this.atLeftBorder()){
+				this.setX(this.getGame().getDisplayWidth()-1);
+			}else if (this.atRightBorder()){
+				this.setX(1-this.getAppearance().getWidth());
+			}
 		}
 	}
 
