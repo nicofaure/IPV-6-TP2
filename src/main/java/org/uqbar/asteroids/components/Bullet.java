@@ -1,8 +1,6 @@
 package org.uqbar.asteroids.components;
 
 
-import java.awt.Color;
-
 import org.uqbar.asteroids.scene.levels.Level1;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
 import org.uqbar.asteroids.utils.ResourceUtil;

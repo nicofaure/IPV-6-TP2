@@ -36,10 +36,8 @@ public class BulletPoolSingleton {
 
 			Bullet bullet = this.getPool().getObj();
 			if(bullet!=null){
-				System.out.println("Se obtuvo bala desde el pool: " + bullet.toString());
 				return bullet;
 			}else{
-				System.out.println("La bala era nula, se tuvo que construir una nueva");
 				return new Bullet();
 			}
 		}catch(Exception e){
@@ -50,7 +48,6 @@ public class BulletPoolSingleton {
 
 	public void returnBullet(Bullet bullet){
 		try {
-			System.out.println("Se devolvio una bala al pool:" + bullet.toString());
 			this.getPool().returnObj(bullet);
 			bullet.destroy();
 		} catch (Exception e) {

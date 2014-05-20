@@ -18,6 +18,8 @@ import com.uqbar.vainilla.MovableComponent;
 import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.colissions.CollisionDetector;
 import com.uqbar.vainilla.events.constants.Key;
+import com.uqbar.vainilla.sound.Sound;
+import com.uqbar.vainilla.sound.SoundBuilder;
 import com.uqbar.vainilla.utils.Vector2D;
 
 public class Ship extends MovableComponent<Level1> {
@@ -30,9 +32,13 @@ public class Ship extends MovableComponent<Level1> {
 	private static int SHOOTING_DELAY = ResourceUtil.getResourceInt("Ship.SHOOTING_DELAY");
 	private static int ROTATION_STEP = ResourceUtil.getResourceInt("Ship.ROTATION_STEP");
 	private static String ROCKET_SPRITE = ResourceUtil.getResourceString("Ship.ROCKET_SPRITE");
+	private static String SHOOT_SOUND = ResourceUtil.getResourceString("Ship.SHOOT_SOUND");
+	private static String COLLISION_SOUND = ResourceUtil.getResourceString("Ship.COLLISION_SOUND");
 	
 	private Vector2D accelerationVector;
 	private int shootingDelay = ResourceUtil.getResourceInt("Ship.shootingDelay");
+	private Sound shootSound = new SoundBuilder().buildSound(SHOOT_SOUND);
+	private Sound collisionSound = new SoundBuilder().buildSound(COLLISION_SOUND);
 
 	public Ship() {
 		super(getDefaultAppearance(), 10, 10);
@@ -83,7 +89,9 @@ public class Ship extends MovableComponent<Level1> {
 	private void checkAsteroidCollision() {
 		for (Asteroid asteroid : this.getScene().getAsteroids()) {
 			if (this.impactAsteroid(asteroid)) {
-				this.loseLife();
+				this.playCollisionSound();
+				//this.loseLife();
+				System.out.println("Colision");
 				break;
 			}
 		}
@@ -178,16 +186,26 @@ public class Ship extends MovableComponent<Level1> {
 	public void shoot() {
 
 		if (this.getShootingDelay() <= 0) {
+			this.playShootSound();
 			Bullet bullet = BulletPoolSingleton.getInstance().obtainBullet();
 			bullet.setVector(new Vector2D(this.getAccelerationVector().getX(), this.getAccelerationVector().getY()));
-			bullet.setX(this.getX() + this.getAppearance().getWidth()/2 -2);
-			bullet.setY(this.getY() + this.getAppearance().getHeight()/2 -2);
+			bullet.setX(this.getX() + this.getAppearance().getWidth()/2 -15);
+			bullet.setY(this.getY() + this.getAppearance().getHeight()/2 -15);
 			bullet.setSpeed(this.getSpeed());
 			this.getScene().addComponent(bullet);
+			
 			this.setShootingDelay(SHOOTING_DELAY);
 		}
 	}
 
+	protected void playShootSound() {
+		this.shootSound.play(1);
+	}
+	
+	protected void playCollisionSound(){
+		this.collisionSound.play(1);
+	}
+	
 	private void decreaseShootDelay(DeltaState deltaState) {
 		if (this.getShootingDelay() > 0) {
 			this.shootingDelay -= deltaState.getDelta() * 250;
