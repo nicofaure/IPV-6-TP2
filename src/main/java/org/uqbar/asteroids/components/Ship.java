@@ -1,13 +1,13 @@
 package org.uqbar.asteroids.components;
 
 
-import org.uqbar.asteroids.game.Asteroids;
 import org.uqbar.asteroids.scene.AsteroidsScene;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
 import com.uqbar.vainilla.appearances.Sprite;
+import com.uqbar.vainilla.colissions.CollisionDetector;
 import com.uqbar.vainilla.events.constants.Key;
 import com.uqbar.vainilla.utils.Vector2D;
 
@@ -64,10 +64,28 @@ public class Ship extends MovableComponent<AsteroidsScene> {
 		}
 
 		this.move(deltaState);
-
+		this.checkAsteroidCollision();
 		// Chequea y se teletransporta si es necesario.
 		// TODO: No esta bueno, deberia estar en otra parte!
 		this.doTeleport();
+	}
+
+	private void checkAsteroidCollision() {
+		for (Asteroid asteroid : this.getScene().getAsteroids()) {
+			if (this.impactAsteroid(asteroid)) {
+				this.loseLife();
+				break;
+			}
+		}
+	}
+
+	private void loseLife() {
+		this.getScene().loseLife();
+		this.destroy();
+	}
+
+	private boolean impactAsteroid(Asteroid asteroid) {
+		return CollisionDetector.INSTANCE.collidesRectAgainstRect(this.getX(), this.getY(), this.getAppearance().getWidth(), this.getAppearance().getHeight(), asteroid.getX(), asteroid.getY(), asteroid.getAppearance().getWidth(), asteroid.getAppearance().getHeight());	
 	}
 
 	@Override

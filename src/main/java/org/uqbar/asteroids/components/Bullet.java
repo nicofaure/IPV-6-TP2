@@ -1,14 +1,11 @@
 package org.uqbar.asteroids.components;
 
-import java.awt.Color;
-
-import org.uqbar.asteroids.game.Asteroids;
 import org.uqbar.asteroids.scene.AsteroidsScene;
 import org.uqbar.asteroids.utils.BulletPoolSingleton;
 
 import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
-import com.uqbar.vainilla.appearances.Circle;
+import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.colissions.CollisionDetector;
 
 public class Bullet extends MovableComponent<AsteroidsScene> {
@@ -18,19 +15,19 @@ public class Bullet extends MovableComponent<AsteroidsScene> {
 
 	public Bullet(){
 		super();
-		this.setAppearance(this.getDefaultAppearance());
+		this.setAppearance(getDefaultAppearance());
 		this.setSpeed(BULLET_SPEED);
 	}
 	
 	public Bullet(double vx, double vy, double x, double y, double shipSpeed) {
-
+//		super(getDefaultAppearance(),x,y);
 		this.setSpeed(BULLET_SPEED + shipSpeed );
 		this.setX(x);
 		this.setY(y);
 	}
 
-	private Circle getDefaultAppearance() {
-		return new Circle(Color.GREEN, 2 * this.radius);
+	private static Sprite getDefaultAppearance() {
+		return Sprite.fromImage("images/shoot.png");
 	}
 
 	@Override
