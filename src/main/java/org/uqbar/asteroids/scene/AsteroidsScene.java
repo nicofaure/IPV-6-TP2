@@ -58,6 +58,10 @@ public class AsteroidsScene extends GameScene {
 		// TODO Auto-generated method stub
 	}
 
+	public void loseLife() {
+		// TODO Auto-generated method stub
+	}
+	
 	public int getWidth() {
 		return this.getGame().getDisplayWidth();
 	}
