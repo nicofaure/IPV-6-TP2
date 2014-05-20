@@ -36,6 +36,7 @@ public class Asteroid extends MovableComponent<Level1>{
 		return AsteroidsSpriteManager.getSprite(this.life);
 	}
 	
+	
 	@Override
 	public void onSceneActivated() {
 		this.positioningOutsideTheSpace();
@@ -60,14 +61,17 @@ public class Asteroid extends MovableComponent<Level1>{
 	}
 	
 	private void doTeleport() {
-		if(this.atBottomBorder()){
-			this.setY(1-this.getAppearance().getHeight());
-		}else if (this.atTopBorder()){
-			this.setY(this.getGame().getDisplayHeight()-1);
-		}else if (this.atLeftBorder()){
-			this.setX(this.getGame().getDisplayWidth()-1);
-		}else if (this.atRightBorder()){
-			this.setX(1-this.getAppearance().getWidth());
+		if(this.getGame()!=null)
+		{
+			if(this.atBottomBorder()){
+				this.setY(1-this.getAppearance().getHeight());
+			}else if (this.atTopBorder()){
+				this.setY(this.getGame().getDisplayHeight()-1);
+			}else if (this.atLeftBorder()){
+				this.setX(this.getGame().getDisplayWidth()-1);
+			}else if (this.atRightBorder()){
+				this.setX(1-this.getAppearance().getWidth());
+			}
 		}
 	}
 
@@ -79,7 +83,10 @@ public class Asteroid extends MovableComponent<Level1>{
 	}
 
 	private boolean atBottomBorder() {
-		return  this.getGame().getDisplayHeight() <= this.getY();
+		if(this.getGame()!=null){
+			return  this.getGame().getDisplayHeight() <= this.getY();
+		}
+		return false;
 	}
 
 	private boolean atTopBorder() {
@@ -87,7 +94,10 @@ public class Asteroid extends MovableComponent<Level1>{
 	}
 		
 	private boolean atRightBorder() {
-		return this.getGame().getDisplayWidth() <= this.getX();
+		if(this.getGame()!=null){
+			return this.getGame().getDisplayWidth() <= this.getX();
+		}
+		return false;
 	}
 	
 	private boolean atLeftBorder() {

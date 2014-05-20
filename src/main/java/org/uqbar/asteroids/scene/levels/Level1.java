@@ -6,11 +6,13 @@ import java.util.List;
 
 import org.uqbar.asteroids.components.Asteroid;
 import org.uqbar.asteroids.components.Ship;
+import org.uqbar.asteroids.scene.GameOverScene;
 import org.uqbar.asteroids.utils.ResourceUtil;
 
 import com.uqbar.vainilla.GameComponent;
 import com.uqbar.vainilla.GameScene;
 import com.uqbar.vainilla.appearances.Rectangle;
+import com.uqbar.vainilla.components.PointsCounter;
 
 public class Level1 extends GameScene {
 
@@ -60,7 +62,8 @@ public class Level1 extends GameScene {
 	}
 
 	public void loseLife() {
-		// TODO Auto-generated method stub
+			this.getShip().destroy();
+			this.getGame().setCurrentScene(new GameOverScene(new PointsCounter()));
 	}
 	
 	public int getWidth() {

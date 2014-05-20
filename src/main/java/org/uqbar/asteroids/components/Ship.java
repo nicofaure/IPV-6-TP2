@@ -1,5 +1,6 @@
 package org.uqbar.asteroids.components;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
 import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.colissions.CollisionDetector;
+import com.uqbar.vainilla.components.PointsCounter;
 import com.uqbar.vainilla.events.constants.Key;
 import com.uqbar.vainilla.sound.Sound;
 import com.uqbar.vainilla.sound.SoundBuilder;
@@ -90,17 +92,13 @@ public class Ship extends MovableComponent<Level1> {
 		for (Asteroid asteroid : this.getScene().getAsteroids()) {
 			if (this.impactAsteroid(asteroid)) {
 				this.playCollisionSound();
-				//this.loseLife();
-				System.out.println("Colision");
+				this.getScene().loseLife();
 				break;
 			}
 		}
 	}
 
-	private void loseLife() {
-		this.getScene().loseLife();
-		this.destroy();
-	}
+
 
 	private boolean impactAsteroid(Asteroid asteroid) {
 		return CollisionDetector
@@ -121,8 +119,9 @@ public class Ship extends MovableComponent<Level1> {
 		this.setVector(this.getVector().producto(0.999));
 	}
 	
+
 	public void actAcceleration(DeltaState deltaState) {
-		// TODO Auto-generated method stub
+
 		double deltaAcceleration = 0.5;
 		double deltaX = 0;
 		double deltaY = 0;
@@ -211,7 +210,9 @@ public class Ship extends MovableComponent<Level1> {
 			this.shootingDelay -= deltaState.getDelta() * 250;
 		}
 	}
-	
+
+
+
 	public double obtainAbsoluteX() {
 		return this.getX() + this.getAppearance().getWidth();
 	}
