@@ -1,6 +1,5 @@
 package org.uqbar.asteroids.scene.levels;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +11,13 @@ import org.uqbar.asteroids.utils.ResourceUtil;
 
 import com.uqbar.vainilla.GameComponent;
 import com.uqbar.vainilla.GameScene;
-import com.uqbar.vainilla.appearances.Rectangle;
+import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.components.PointsCounter;
 
 public class Level1 extends GameScene {
 
+	private static String BACKGROUND_IMAGE = ResourceUtil.getResourceString("Level1.BACKGROUND_IMAGE");
+	
 	private final List<Asteroid> asteroids = new ArrayList<Asteroid>();
 	private Ship ship = new Ship();
 
@@ -30,8 +31,12 @@ public class Level1 extends GameScene {
 	}
 	
 	private void initializeBackground() {
-		GameComponent<GameScene> background = new GameComponent<GameScene>(new Rectangle(Color.BLACK, this.getGame().getDisplayWidth(), this.getGame().getDisplayHeight()),0 ,0);
+		GameComponent<GameScene> background = new GameComponent<GameScene>(getDefaultAppearance(),0 ,0);
 		this.addComponent(background);
+	}
+	
+	private static Sprite getDefaultAppearance() {
+		return Sprite.fromImage(BACKGROUND_IMAGE);
 	}
 	
 	@Override
