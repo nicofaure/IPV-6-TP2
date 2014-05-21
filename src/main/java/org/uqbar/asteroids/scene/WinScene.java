@@ -8,7 +8,6 @@ import com.uqbar.vainilla.components.PointsCounter;
 import com.uqbar.vainilla.sound.SoundBuilder;
 
 public class WinScene extends GameScene {
-	private static final String GAMEOVER_SOUND = ResourceUtil.getResourceString("GameOverScene.GAMEOVER_SOUND");
 	
 	public WinScene(PointsCounter pointCounter) {
 		this.addComponent(pointCounter);

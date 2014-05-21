@@ -114,31 +114,23 @@ public class Ship extends MovableComponent<Level1> {
 						asteroid.getAppearance().getHeight());	
 	}
 
-	@Override
-	public void decreaseAcceleration() {
-		this.setVector(this.getVector().producto(0.999));
+
+	public void decreaseAcceleration(DeltaState deltaState) {
+		double deltaAcceleration = deltaState.getDelta() * 16;
+		this.setVector(this.getVector().producto(1-deltaAcceleration));
 	}
 	
 
 	public void actAcceleration(DeltaState deltaState) {
-
-		double deltaAcceleration = 0.5;
-		double deltaX = 0;
-		double deltaY = 0;
 		
-		if(this.getAccelerationVector().getX()>0) {
-			deltaX = deltaAcceleration; 
-		} else {
-			deltaX = -deltaAcceleration;
+		int factor = 1;
+		if(this.getAccelerationVector().getModule()<25)
+		{
+			factor = 10;
 		}
-		
-		if(this.getAccelerationVector().getY()>0) {
-			deltaY = deltaAcceleration; 
-		}
-		else {
-			deltaY = -deltaAcceleration;
-		}
-		this.setAccelerationVector(this.getAccelerationVector().suma(new Vector2D(deltaX, deltaY)));
+		double deltaAcceleration = deltaState.getDelta() * factor;
+		System.out.println(this.getAccelerationVector().getModule());
+		this.setAccelerationVector(this.getAccelerationVector().producto(deltaAcceleration + 1));
 	}
 
 	// ---
