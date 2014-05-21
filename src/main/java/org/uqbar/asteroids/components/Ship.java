@@ -129,7 +129,6 @@ public class Ship extends MovableComponent<Level1> {
 			factor = 10;
 		}
 		double deltaAcceleration = deltaState.getDelta() * factor;
-		System.out.println(this.getAccelerationVector().getModule());
 		this.setAccelerationVector(this.getAccelerationVector().producto(deltaAcceleration + 1));
 	}
 
