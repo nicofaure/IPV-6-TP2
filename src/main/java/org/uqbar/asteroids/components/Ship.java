@@ -18,8 +18,6 @@ import com.uqbar.vainilla.DeltaState;
 import com.uqbar.vainilla.MovableComponent;
 import com.uqbar.vainilla.appearances.Sprite;
 import com.uqbar.vainilla.colissions.CollisionDetector;
-import com.uqbar.vainilla.components.PointsCounter;
-import com.uqbar.vainilla.events.constants.Key;
 import com.uqbar.vainilla.sound.Sound;
 import com.uqbar.vainilla.sound.SoundBuilder;
 import com.uqbar.vainilla.utils.Vector2D;

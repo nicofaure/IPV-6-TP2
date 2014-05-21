@@ -15,7 +15,7 @@ public class OutOfBoundShipRule extends ShipRule {
 	public void apply(Ship ship, DeltaState deltaState) {
 		
 		if (this.atBottomBorder(ship)) {
-			ship.alignBottomTo(1);
+			ship.setY(1-ship.getAppearance().getHeight());
 		} else if (this.atTopBorder(ship)) {
 			ship.alignTopTo(ship.getGame().getDisplayHeight() - 1);
 		} else if (this.atLeftBorder(ship)) {
